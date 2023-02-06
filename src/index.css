@@ -16,3 +16,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+input{
+  outline: none;
+}
+
+input[type=file]::file-selector-button {
+  display: none;
+}
+
+input[type=file] label{
+  display: none;
+}
