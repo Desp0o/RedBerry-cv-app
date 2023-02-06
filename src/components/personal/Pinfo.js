@@ -90,10 +90,15 @@ export default function Pinfo() {
                 <div className="pl-[150px] flex gap-[19px]">
                     <p className="text-[18px] font-[500]">პირადი ფოტოს ატვირთვა</p>
 
-                    <input  type='file'
-                            accept="image/png, image/jpg, image/webp, image/jpeg"
-                            className="bg-[#0E80BF] rounded-[4px] w-[107px] h-[27px] pt-[10px] pr-[10px] pb-[12px] pl-[10px] 
-                                                    flex items-center justify-center" />
+                    <div className="bg-[#0E80BF] rounded-[4px] w-[107px] h-[27px] pt-[10px] pr-[10px] pb-[12px] pl-[10px] 
+                                    flex items-center justify-center overflow-hidden" >
+                        <input  type='file'
+                                accept="image/png, image/jpg, image/webp, image/jpeg"
+                                className="scale-[5] opacity-0 absolute"
+                        />
+                        <span className="text-[14px] text-[#FFF] font-[400]">ატვირთვა</span>
+                    </div>
+                    
                 </div>
             </div>
 
