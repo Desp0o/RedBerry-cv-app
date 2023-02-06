@@ -4,6 +4,7 @@ export default function HeaderComponent(props){
     function clearStorages(){
         sessionStorage.removeItem('name')
         sessionStorage.removeItem('surName')
+        sessionStorage.removeItem('aboutMe')
     }
 
     return(
