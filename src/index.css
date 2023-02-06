@@ -21,7 +21,3 @@ code {
 input{
   outline: none;
 }
-
-input[type=file]::file-selector-button {
-  display: none;
-}
