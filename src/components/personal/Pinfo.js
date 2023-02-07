@@ -7,57 +7,82 @@ function inputHanlder(e, state){
     state(e.currentTarget.value)
 }
 
-
 //რეგექსის შემოწმება
-const regex1 = /^[ა-ჰ]{2,}$/;
 function regexCheck(ref){
+    const regex1 = /^[ა-ჰ]{2,}$/;
+    
     if(regex1.test(ref.current.value)){
         ref.current.style.border = '1px solid #98E37E'
-    }else if(ref.current.value.length === 0){
-        ref.current.style.border = '1px solid #BCBCBC'
     }else{
-        ref.current.style.border = '1px solid #EF5050'
+        ref.current.style.border = '1px solid #BCBCBC'
     }
 }
 
-const regex2 = /^[ა-ჰ, 0-9,*!@#$%^&()-=+„“?<>":;']{2,}$/;
 function regexCheckDescitpion(ref){
+    const regex2 = /^[ა-ჰ, 0-9,*!@#$%^&()-=+„“?<>":;']{2,}$/;
+
     if(regex2.test(ref.current.value)){
-        ref.current.style.border = '1px solid red'
+        ref.current.style.border = '1px solid #98E37E'
+    }else{
+        ref.current.style.border = '1px solid #BCBCBC'
+    }
+}
+
+function emailCheck(ref){
+    if(ref.current.value.endsWith("@redberry.ge")){
+        ref.current.style.border = '1px solid #98E37E'
+    }else{
+        ref.current.style.border = '1px solid #BCBCBC'
+    }
+}
+
+function numberCheck(ref){
+    const numberRegex = /^\+995\s5\d{2}\s\d{2}\s\d{2}\s\d{2}$/
+
+    if(numberRegex.test(ref.current.value)){
+        ref.current.style.border = '1px solid #98E37E'
     }else{
         ref.current.style.border = '1px solid #BCBCBC'
     }
 }
 
 export default function Pinfo() {
-    
-
-    const inputNameRef = useRef()
+    const inputNameRef    = useRef()
     const inputSurNameRef = useRef()
     const inputAboutMeRef = useRef()
+    const inputEmailRef   = useRef()
+    const inputNumberRef  = useRef()
 
-    const [name, setName] = useState(sessionStorage.getItem('name') || '')
+    const [name, setName]       = useState(sessionStorage.getItem('name') || '')
     const [surName, setSurName] = useState(sessionStorage.getItem('surName') || '')
     const [aboutMe, setAboutNe] = useState(sessionStorage.getItem('aboutMe') || '')
+    const [email, setEmail]     = useState(sessionStorage.getItem('email') || '')
+    const [number ,setNumber]   = useState(sessionStorage.getItem('number') || '')
     
 
     useEffect(()=>{
         sessionStorage.setItem('name', name) // name storage
         sessionStorage.setItem('surName', surName) // surname storage
         sessionStorage.setItem('aboutMe', aboutMe)
+        sessionStorage.setItem('email', email)
+        sessionStorage.setItem('number', number)
 
         regexCheck(inputNameRef)
         regexCheck(inputSurNameRef)
 
         regexCheckDescitpion(inputAboutMeRef)
+        emailCheck(inputEmailRef)
 
-    },[name, surName, aboutMe])
+        numberCheck(inputNumberRef)
+        setNumber(inputNumberRef.current.value.replace(/(\d{3})(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5'))
+
+    },[name, surName, aboutMe, email, number])
   
     return (
-        <div className="w-full h-[100vh] box-border bg-[#F9F9F9]">
+        <div className="w-full h-[100vh] bg-[#F9F9F9]">
 
             {/* left side  */}
-            <div className="w-[1098px] h-[100vh] bg-[#F9F9F9] box-border">
+            <div className="w-[1098px] h-[100vh] bg-[#E6E6E6]">
                 <HeaderComponent
                     title='ᲞᲘᲠᲐᲓᲘ ᲘᲜᲤᲝ'
                     page='1/3'
@@ -112,9 +137,9 @@ export default function Pinfo() {
                 </div>
 
                 {/* lil bio text input */}
-                <div className="w-[846px] h-[148px] pl-[24px] pr-[24px] pt-[8px] pb-[8px] my-[41px] 
-                                mx-[124px] flex flex-col gap-[8px]">
-                    <p>ჩემ შესახებ (არასავალდებულო)</p>
+                <div className="w-[846px] pl-[24px] pr-[24px] pt-[8px] pb-[8px] my-[41px] 
+                                mx-[124px] flex flex-col gap-[8px] box-border">
+                    <p className={`text-[16px] font-[500]`}>ჩემ შესახებ (არასავალდებულო)</p>
 
                     <input 
                         ref={inputAboutMeRef}
@@ -124,9 +149,33 @@ export default function Pinfo() {
                         onChange={(e)=>inputHanlder(e,setAboutNe)}
                     />
                 </div>
-            </div>
 
-            
+                {/* email input */}
+                <div className="w-[846px] pl-[24px] pr-[24px] pt-[8px] pb-[8px] mx-[124px] flex flex-col gap-[8px]">
+                    <p className={`text-[16px] font-[500]`}>ელ.ფოსტა</p>
+                    <input
+                        className="w-[798px] h-[48px] rounded-[4px] bg-[#FFF] border border-[#BCBCBC] box-border"
+                        ref={inputEmailRef}
+                        value={email}
+                        type='email'
+                        onChange={(e) => inputHanlder(e, setEmail)}
+                    />
+                    <p className="text-[#2E2E2E] text-[14px] font-[300]">უნდა მთავრდებოდეს @redberry.ge-ით</p>
+                </div>
+
+                {/* number input */}
+                <div className="w-[846px] pl-[24px] pr-[24px] pt-[8px] pb-[8px] mx-[124px] my-[13px] flex flex-col gap-[8px]">
+                    <p className={`text-[16px] font-[500]`}>მობილურის ნომერი</p>
+                    <input
+                        ref={inputNumberRef}
+                        className="w-[798px] h-[48px] rounded-[4px] bg-[#FFF] border border-[#BCBCBC] box-border"
+                        type='text'
+                        value={number}
+                        onChange={(e) => inputHanlder(e, setNumber)}
+                    />
+                    <p className="text-[#2E2E2E] text-[14px] font-[300]">უნდა აკმაყოფილებდეს ქართული მობილურის ნომრის ფორმატს</p>
+                </div>
+            </div>
 
         </div>
 
