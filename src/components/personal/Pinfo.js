@@ -1,4 +1,5 @@
 import {useRef, useEffect, useState } from "react";
+import CV from "../CvComponent";
 import HeaderComponent from "../headerCom";
 
 
@@ -29,7 +30,8 @@ function regexCheckDescitpion(ref){
 }
 
 function emailCheck(ref){
-    if(ref.current.value.endsWith("@redberry.ge")){
+    const regex2 = /^[A-Za-z, 0-9,*!@#$%^&()-=+„“?<>":;']{13,}$/;
+    if(ref.current.value.endsWith("@redberry.ge") && regex2.test(ref.current.value)){
         ref.current.style.border = '1px solid #98E37E'
     }else{
         ref.current.style.border = '1px solid #BCBCBC'
@@ -46,15 +48,18 @@ function numberCheck(ref){
     }
 }
 
+
 export default function Pinfo() {
     const inputNameRef    = useRef()
     const inputSurNameRef = useRef()
+    const avatarRef = useRef()
     const inputAboutMeRef = useRef()
     const inputEmailRef   = useRef()
     const inputNumberRef  = useRef()
 
     const [name, setName]       = useState(sessionStorage.getItem('name') || '')
     const [surName, setSurName] = useState(sessionStorage.getItem('surName') || '')
+    const [avatar, setAvatar]   = useState(sessionStorage.getItem('avatar') || '')
     const [aboutMe, setAboutNe] = useState(sessionStorage.getItem('aboutMe') || '')
     const [email, setEmail]     = useState(sessionStorage.getItem('email') || '')
     const [number ,setNumber]   = useState(sessionStorage.getItem('number') || '')
@@ -76,13 +81,26 @@ export default function Pinfo() {
         numberCheck(inputNumberRef)
         setNumber(inputNumberRef.current.value.replace(/(\d{3})(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5'))
 
-    },[name, surName, aboutMe, email, number])
+        console.log(avatar);
+        
+    },[name, surName, aboutMe, email, number, avatar])
+
+
+    
+    function fileHandler(e){
+        const file = e.target.files[0]
+        const reader = new FileReader()
+        reader.readAsText(file)
+        const fileURL = URL.createObjectURL(file);
+        setAvatar(fileURL)
+        sessionStorage.setItem('avatar', avatar)
+    }
   
     return (
-        <div className="w-full h-[100vh] bg-[#F9F9F9]">
+        <div className="w-full h-[100vh] bg-[#F9F9F9] flex">
 
             {/* left side  */}
-            <div className="w-[1098px] h-[100vh] bg-[#E6E6E6]">
+            <div className="w-[1088px] h-[100vh] bg-[#E6E6E6] box-border">
                 <HeaderComponent
                     title='ᲞᲘᲠᲐᲓᲘ ᲘᲜᲤᲝ'
                     page='1/3'
@@ -127,9 +145,11 @@ export default function Pinfo() {
 
                     <div className="bg-[#0E80BF] rounded-[4px] w-[107px] h-[27px] pt-[10px] pr-[10px] pb-[12px] pl-[10px] 
                                     flex items-center justify-center overflow-hidden relative" >
-                        <input  type='file'
+                        <input  
+                                type='file'
                                 accept="image/png, image/jpg, image/webp, image/jpeg"
                                 className="scale-[2] absolute left-0 opacity-0"
+                                onChange={fileHandler}
                         />
                         <span className="text-[14px] text-[#FFF] font-[400]">ატვირთვა</span>
                     </div>
@@ -175,6 +195,19 @@ export default function Pinfo() {
                     />
                     <p className="text-[#2E2E2E] text-[14px] font-[300]">უნდა აკმაყოფილებდეს ქართული მობილურის ნომრის ფორმატს</p>
                 </div>
+            </div>
+
+            {/* right side */}
+            <div className="w-[832px] h-[100vh] box-border pl-[80px]">
+                <CV 
+                    
+                    name={name}
+                    surName={surName}
+                    email={email}
+                    number={number}
+                    bio={aboutMe}
+                    avatar={avatar}
+                />
             </div>
 
         </div>

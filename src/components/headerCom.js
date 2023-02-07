@@ -5,6 +5,7 @@ export default function HeaderComponent(props){
         sessionStorage.removeItem('name')
         sessionStorage.removeItem('surName')
         sessionStorage.removeItem('aboutMe')
+        sessionStorage.removeItem('email')
         sessionStorage.removeItem('number')
     }
 
