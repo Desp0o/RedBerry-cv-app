@@ -1,12 +1,7 @@
-import {useRef, useEffect, useState } from "react";
+import {useRef, useEffect, useContext, useState } from "react";
+import { UsertContext } from "../../conText/textContext";
 import CV from "../CvComponent";
 import HeaderComponent from "../headerCom";
-
-
-//ინპუტების ფუნქცია
-function inputHanlder(e, state){
-    state(e.currentTarget.value)
-}
 
 //რეგექსის შემოწმება
 function regexCheck(ref){
@@ -49,52 +44,42 @@ function numberCheck(ref){
 }
 
 
+
 export default function Pinfo() {
+    const {user,setUser} = useContext(UsertContext)
+    const [numberFormat, setNumberFormat] = useState()
+
+
     const inputNameRef    = useRef()
     const inputSurNameRef = useRef()
-    const avatarRef = useRef()
     const inputAboutMeRef = useRef()
     const inputEmailRef   = useRef()
     const inputNumberRef  = useRef()
 
-    const [name, setName]       = useState(sessionStorage.getItem('name') || '')
-    const [surName, setSurName] = useState(sessionStorage.getItem('surName') || '')
-    const [avatar, setAvatar]   = useState(sessionStorage.getItem('avatar') || '')
-    const [aboutMe, setAboutNe] = useState(sessionStorage.getItem('aboutMe') || '')
-    const [email, setEmail]     = useState(sessionStorage.getItem('email') || '')
-    const [number ,setNumber]   = useState(sessionStorage.getItem('number') || '')
-    
-
     useEffect(()=>{
-        sessionStorage.setItem('name', name) // name storage
-        sessionStorage.setItem('surName', surName) // surname storage
-        sessionStorage.setItem('aboutMe', aboutMe)
-        sessionStorage.setItem('email', email)
-        sessionStorage.setItem('number', number)
-
+        sessionStorage.setItem('user', JSON.stringify(user))
         regexCheck(inputNameRef)
         regexCheck(inputSurNameRef)
-
         regexCheckDescitpion(inputAboutMeRef)
         emailCheck(inputEmailRef)
-
         numberCheck(inputNumberRef)
-        setNumber(inputNumberRef.current.value.replace(/(\d{3})(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5'))
+        setNumberFormat(user.phone_number?.replace(/(\d{3})(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5'))
+    },[user])
 
-        console.log(avatar);
+    const inputHandler = (e) =>{
+        setUser(prev => ({...prev, [e.target.name] : e.target.value}))
         
-    },[name, surName, aboutMe, email, number, avatar])
+    }
 
-
-    
-    function fileHandler(e){
+    const ImageHandler = (e) =>{
         const file = e.target.files[0]
         const reader = new FileReader()
-        reader.readAsText(file)
+        reader.readAsDataURL(file)
         const fileURL = URL.createObjectURL(file);
-        setAvatar(fileURL)
-        sessionStorage.setItem('avatar', avatar)
+        setUser({image: fileURL})
     }
+
+    console.log(user.image);
   
     return (
         <div className="w-full h-[100vh] bg-[#F9F9F9] flex">
@@ -117,8 +102,8 @@ export default function Pinfo() {
                             className='w-[371px] h-[48px] border border-[#BCBCBC] rounded-[4px] bg-[#FFF]' 
                             name='name' 
                             type='text' 
-                            value={name}
-                            onChange={(e)=>inputHanlder(e, setName)}
+                            value={user.name}
+                            onChange={inputHandler}
                         />
                         <span className="text-[14px] font-[300]">მინიმუმ 2 ასო, ქართული ასოები</span>
                     </div>
@@ -129,10 +114,10 @@ export default function Pinfo() {
                         <input 
                             ref={inputSurNameRef}
                             className='w-[371px] h-[48px] border border-[#BCBCBC] rounded-[4px] bg-[#FFF]' 
-                            name='name' 
+                            name='surname' 
+                            value={user.surname}
                             type='text' 
-                            value={surName}
-                            onChange={(e)=>inputHanlder(e, setSurName)}
+                            onChange={inputHandler}
                         />
                         <span className="text-[14px] font-[300]">მინიმუმ 2 ასო, ქართული ასოები</span>
                     </div>
@@ -149,7 +134,7 @@ export default function Pinfo() {
                                 type='file'
                                 accept="image/png, image/jpg, image/webp, image/jpeg"
                                 className="scale-[2] absolute left-0 opacity-0"
-                                onChange={fileHandler}
+                                onChange={ImageHandler}
                         />
                         <span className="text-[14px] text-[#FFF] font-[400]">ატვირთვა</span>
                     </div>
@@ -164,9 +149,10 @@ export default function Pinfo() {
                     <input 
                         ref={inputAboutMeRef}
                         type='text' 
+                        name="about_me"
+                        value={user.about_me}
                         className="w-[798px] h-[103px] bg-[#FFF] border border-[#BCBCBC] rounded-[4px] box-border"
-                        value={aboutMe}
-                        onChange={(e)=>inputHanlder(e,setAboutNe)}
+                        onChange={inputHandler}
                     />
                 </div>
 
@@ -176,9 +162,10 @@ export default function Pinfo() {
                     <input
                         className="w-[798px] h-[48px] rounded-[4px] bg-[#FFF] border border-[#BCBCBC] box-border"
                         ref={inputEmailRef}
-                        value={email}
                         type='email'
-                        onChange={(e) => inputHanlder(e, setEmail)}
+                        name="email"
+                        value={user.email}
+                        onChange={inputHandler}
                     />
                     <p className="text-[#2E2E2E] text-[14px] font-[300]">უნდა მთავრდებოდეს @redberry.ge-ით</p>
                 </div>
@@ -190,8 +177,9 @@ export default function Pinfo() {
                         ref={inputNumberRef}
                         className="w-[798px] h-[48px] rounded-[4px] bg-[#FFF] border border-[#BCBCBC] box-border"
                         type='text'
-                        value={number}
-                        onChange={(e) => inputHanlder(e, setNumber)}
+                        name="phone_number"
+                        value={numberFormat}
+                        onChange={inputHandler}
                     />
                     <p className="text-[#2E2E2E] text-[14px] font-[300]">უნდა აკმაყოფილებდეს ქართული მობილურის ნომრის ფორმატს</p>
                 </div>
@@ -199,15 +187,7 @@ export default function Pinfo() {
 
             {/* right side */}
             <div className="w-[832px] h-[100vh] box-border pl-[80px]">
-                <CV 
-                    
-                    name={name}
-                    surName={surName}
-                    email={email}
-                    number={number}
-                    bio={aboutMe}
-                    avatar={avatar}
-                />
+                <CV />
             </div>
 
         </div>

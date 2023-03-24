@@ -2,11 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function HeaderComponent(props){
     function clearStorages(){
-        sessionStorage.removeItem('name')
-        sessionStorage.removeItem('surName')
-        sessionStorage.removeItem('aboutMe')
-        sessionStorage.removeItem('email')
-        sessionStorage.removeItem('number')
+        sessionStorage.removeItem("user")
     }
 
     return(
