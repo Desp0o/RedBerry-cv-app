@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/RedBerry-cv-app/static/css/main.9078812e.css",
+    "main.js": "/RedBerry-cv-app/static/js/main.6e25cec7.js",
+    "static/media/mainBG.png": "/RedBerry-cv-app/static/media/mainBG.832365579848b64968d0.png",
+    "static/media/HelveticaNeue.ttc": "/RedBerry-cv-app/static/media/HelveticaNeue.67d426c3bd180e2ea838.ttc",
+    "static/media/stamp.png": "/RedBerry-cv-app/static/media/stamp.065c53f5e3d5d6fd73f9.png",
+    "index.html": "/RedBerry-cv-app/index.html",
+    "main.9078812e.css.map": "/RedBerry-cv-app/static/css/main.9078812e.css.map",
+    "main.6e25cec7.js.map": "/RedBerry-cv-app/static/js/main.6e25cec7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9078812e.css",
+    "static/js/main.6e25cec7.js"
+  ]
+}
